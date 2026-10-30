@@ -1523,3 +1523,222 @@ ul, ol {
         display: flex;
     }
 }
+
+/* ==========================================
+   EXIT-INTENT MODAL (40% OFF — $11.90 USD)
+   ========================================== */
+.exit-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 9, 18, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.exit-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.exit-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: linear-gradient(160deg, #151e38 0%, #0b1020 100%);
+    border: 2px solid rgba(80, 200, 120, 0.55);
+    border-radius: 26px;
+    padding: 34px 30px 26px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75), 0 0 40px rgba(80, 200, 120, 0.18);
+    text-align: center;
+    transform: translateY(18px) scale(0.97);
+    transition: transform 0.3s ease;
+}
+
+.exit-modal-overlay.show .exit-modal-card {
+    transform: translateY(0) scale(1);
+}
+
+@media (max-width: 560px) {
+    .exit-modal-card {
+        padding: 26px 18px 20px;
+        border-radius: 20px;
+    }
+}
+
+.exit-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-body);
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.exit-modal-close:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text-white);
+}
+
+.exit-modal-badge {
+    display: inline-block;
+    background: rgba(245, 166, 35, 0.18);
+    border: 1px solid rgba(245, 166, 35, 0.45);
+    color: #ffd97d;
+    font-size: 0.74rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 30px;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+}
+
+.exit-modal-card h3 {
+    font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+    margin-bottom: 10px;
+    line-height: 1.25;
+}
+
+.exit-modal-desc {
+    font-size: 0.93rem;
+    color: var(--text-body);
+    line-height: 1.55;
+    margin-bottom: 18px;
+}
+
+.exit-price-box {
+    background: rgba(8, 12, 24, 0.85);
+    border: 1px solid rgba(80, 200, 120, 0.35);
+    border-radius: 18px;
+    padding: 18px 16px;
+    margin-bottom: 18px;
+}
+
+.exit-old-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.exit-save-pill {
+    background: rgba(80, 200, 120, 0.22);
+    color: var(--secondary-light);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+}
+
+.exit-new-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0 8px;
+}
+
+.exit-currency {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--secondary-light);
+}
+
+.exit-amount {
+    font-size: clamp(2rem, 4vw, 2.65rem);
+    font-weight: 800;
+    color: var(--text-white);
+    line-height: 1.05;
+}
+
+.exit-usd-badge {
+    display: inline-block;
+    background: rgba(74, 144, 226, 0.15);
+    border: 1px solid rgba(74, 144, 226, 0.38);
+    color: #d8ebff;
+    font-size: 0.82rem;
+    padding: 5px 14px;
+    border-radius: 30px;
+}
+
+.exit-usd-badge strong {
+    color: #ffffff;
+}
+
+.exit-perks {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.86rem;
+    color: var(--text-body);
+}
+
+.exit-perks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+}
+
+.exit-perks li span {
+    color: var(--secondary-light);
+    font-weight: 800;
+}
+
+.exit-cta-btn {
+    box-shadow: 0 12px 32px rgba(80, 200, 120, 0.35);
+}
+
+.exit-modal-keep-reading {
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px;
+    transition: color 0.2s ease;
+}
+
+.exit-modal-keep-reading:hover {
+    color: var(--secondary-light);
+}
+
+.discount-unlocked-pill {
+    display: inline-block;
+    background: rgba(245, 166, 35, 0.2);
+    border: 1px solid rgba(245, 166, 35, 0.5);
+    color: #ffd97d;
+    font-size: 0.76rem;
+    font-weight: 800;
+    padding: 5px 13px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}

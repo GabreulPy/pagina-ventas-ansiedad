@@ -582,19 +582,19 @@
                         <!-- Precio principal (cambia según el país) -->
                         <div class="current-price">
                             <span class="currency" id="localCurrencyCode">USD</span>
-                            <span class="amount" id="offerPrice">$10.00</span>
+                            <span class="amount" id="offerPrice">$17.00</span>
                         </div>
 
                         <!-- Precio en Dólares SIEMPRE visible -->
                         <div class="usd-always-badge" id="usdAlwaysBadge">
-                            <span>💵 Precio oficial en dólares: <strong>$10.00 USD</strong></span>
+                            <span>💵 Precio oficial en dólares: <strong>$17.00 USD</strong></span>
                         </div>
 
                         <p class="price-note">Pago único • Sin mensualidades ocultas • Acceso inmediato 24/7</p>
 
-                        <!-- NOTA: Reemplaza el href por tu enlace de pago (Hotmart, Stripe, WhatsApp o PayPal) -->
-                        <a href="https://cursoonline180.com/ansiedad/" id="mainCheckoutBtn" class="btn btn-xl btn-primary btn-block">
-                            <span id="checkoutBtnText">Obtener Acceso por $10.00 USD</span>
+                        <!-- Enlace oficial de pago en Hotmart ($17.00 USD) -->
+                        <a href="https://pay.hotmart.com/S108269721W" id="mainCheckoutBtn" class="btn btn-xl btn-primary btn-block" target="_blank" rel="noopener">
+                            <span id="checkoutBtnText">Obtener Acceso por $17.00 USD</span>
                             <span class="btn-arrow">→</span>
                         </a>
 
@@ -699,9 +699,52 @@
     <div class="mobile-sticky-cta" id="mobileStickyCta">
         <div class="mobile-sticky-info">
             <strong>App Web Anti-Ansiedad</strong>
-            <span id="mobileStickyPrice">Acceso completo • $10.00 USD</span>
+            <span id="mobileStickyPrice">Acceso completo • $17.00 USD</span>
         </div>
-        <a href="#acceso" class="btn btn-sm btn-primary">Acceder ahora →</a>
+        <a href="#acceso" id="mobileStickyBtn" class="btn btn-sm btn-primary">Acceder ahora →</a>
+    </div>
+
+    <!-- MODAL DE INTENCIÓN DE SALIDA (EXIT-INTENT) — OFERTA ESPECIAL 40% OFF ($11.90 USD) -->
+    <div class="exit-modal-overlay" id="exitIntentModal" aria-hidden="true">
+        <div class="exit-modal-card" role="dialog" aria-modal="true" aria-labelledby="exitModalTitle">
+            <button class="exit-modal-close" id="exitModalCloseBtn" aria-label="Cerrar ventana">✕</button>
+
+            <div class="exit-modal-badge">🌿 ESPERA UN SEGUNDO • DESCUENTO ESPECIAL DE APOYO (-40%)</div>
+
+            <h3 id="exitModalTitle">No queremos que el precio sea un obstáculo para tu tranquilidad</h3>
+
+            <p class="exit-modal-desc">
+                Sabemos lo agotador que es lidiar con la mente acelerada o la ansiedad en silencio. Si hoy se te dificulta invertir los <strong>$17.00 USD</strong>, hemos habilitado para ti una <strong>beca de acceso inmediato con 40% de descuento</strong>:
+            </p>
+
+            <div class="exit-price-box">
+                <div class="exit-old-row">
+                    <span>Precio normal: <del id="exitOldPrice">$17.00 USD</del></span>
+                    <span class="exit-save-pill">AHORRAS 40% HOY</span>
+                </div>
+                <div class="exit-new-price">
+                    <span class="exit-currency" id="exitLocalCurrency">USD</span>
+                    <span class="exit-amount" id="exitOfferPrice">$11.90</span>
+                </div>
+                <div class="exit-usd-badge" id="exitUsdBadge">
+                    💵 Precio especial en dólares: <strong>$11.90 USD</strong> (Pago único)
+                </div>
+            </div>
+
+            <ul class="exit-perks">
+                <li><span>✓</span> <strong>Incluye el 100% de la App Web:</strong> Botón SOS Calma (Respiración 4-2-6, Anclaje 5-4-3-2-1 y Diario), Audios 432 Hz + Modo Nocturno, Libro Interactivo de 22 capítulos y Plan de 4 semanas.</li>
+                <li><span>✓</span> <strong>Acceso vitalicio + Garantía de 7 días</strong> procesada de forma segura por Hotmart.</li>
+            </ul>
+
+            <a href="https://pay.hotmart.com/S108269721W?off=yylv3412" id="exitCheckoutBtn" class="btn btn-xl btn-primary btn-block exit-cta-btn" target="_blank" rel="noopener">
+                <span id="exitCheckoutBtnText">Sí, quiero acceder por $11.90 USD</span>
+                <span class="btn-arrow">→</span>
+            </a>
+
+            <button class="exit-modal-keep-reading" id="exitKeepReadingBtn" type="button">
+                Quiero terminar de leer la página primero (mantener mi 40% de descuento activo)
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
