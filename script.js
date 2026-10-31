@@ -136,13 +136,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (firstBtn) firstBtn.click();
     }
 
-    // 6. Sistema de Precio Local según Ubicación + Precio en USD Siempre Visible ($17.00 USD / Oferta Salida $11.90 USD)
+    // 6. Sistema de Precio Local según Ubicación + Precio en USD Siempre Visible ($17.00 USD fijo en página / $11.90 USD en ventana de salida)
     var BASE_USD = 17;
     var EXIT_USD = 11.90;
-    var OLD_USD = 37;
-    var MAIN_CHECKOUT_URL = 'https://pay.hotmart.com/S108269721W';
-    var EXIT_CHECKOUT_URL = 'https://pay.hotmart.com/S108269721W?off=yylv3412';
-    var isExitDiscountActiveOnPage = false;
+    var OLD_USD = 197;
 
     var countryCatalog = {
         USD: { name: 'Estados Unidos / Internacional', flag: '🇺🇸', currency: 'USD', symbol: '$', rate: 1, decimals: 2, locale: 'en-US' },
@@ -172,9 +169,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var offerPriceEl = document.getElementById('offerPrice');
     var oldPriceEl = document.getElementById('oldPriceDisplay');
     var usdBadgeEl = document.getElementById('usdAlwaysBadge');
-    var checkoutBtnEl = document.getElementById('mainCheckoutBtn');
     var checkoutBtnTextEl = document.getElementById('checkoutBtnText');
     var mobileStickyPriceEl = document.getElementById('mobileStickyPrice');
+    var stackTotalEl = document.getElementById('stackTotalDisplay');
+    var stackFinalEl = document.getElementById('stackFinalDisplay');
+    var vsPriceTags = document.querySelectorAll('.vs-price-tag[data-usd-val]');
 
     // Elementos del Modal de Intención de Salida (40% OFF -> $11.90 USD)
     var exitOldPriceEl = document.getElementById('exitOldPrice');
@@ -208,46 +207,50 @@ document.addEventListener('DOMContentLoaded', function () {
             selectEl.value = resolvedKey;
         }
 
-        var activeUsd = isExitDiscountActiveOnPage ? EXIT_USD : BASE_USD;
-        var activeUsdStr = activeUsd.toFixed(2);
-        var exitUsdStr = EXIT_USD.toFixed(2);
         var baseUsdStr = BASE_USD.toFixed(2);
+        var exitUsdStr = EXIT_USD.toFixed(2);
+        var oldUsdStr = OLD_USD.toFixed(2);
+        var savedUsdStr = (OLD_USD - BASE_USD).toFixed(2);
 
-        var localNow = formatCurrencyAmount(activeUsd * info.rate, info);
         var localBase = formatCurrencyAmount(BASE_USD * info.rate, info);
         var localExit = formatCurrencyAmount(EXIT_USD * info.rate, info);
         var localOld = formatCurrencyAmount(OLD_USD * info.rate, info);
 
         if (currencyCodeEl) currencyCodeEl.textContent = info.currency;
-        if (offerPriceEl) offerPriceEl.textContent = localNow;
+        if (offerPriceEl) offerPriceEl.textContent = localBase;
 
         // Actualizar también los precios dentro del Modal de Intención de Salida ($11.90 USD)
         if (exitLocalCurrencyEl) exitLocalCurrencyEl.textContent = info.currency;
         if (exitOfferPriceEl) exitOfferPriceEl.textContent = localExit;
 
-        if (info.currency === 'USD') {
-            if (oldPriceEl) {
-                oldPriceEl.textContent = isExitDiscountActiveOnPage ? ('$' + baseUsdStr + ' USD') : ('$' + OLD_USD + '.00 USD');
+        // Actualizar etiquetas de valor individual de cada herramienta
+        vsPriceTags.forEach(function (tag) {
+            var itemUsd = parseFloat(tag.getAttribute('data-usd-val') || '0');
+            if (info.currency === 'USD') {
+                tag.textContent = '$' + itemUsd.toFixed(2) + ' USD';
+            } else {
+                var itemLocal = formatCurrencyAmount(itemUsd * info.rate, info);
+                tag.textContent = itemLocal + ' ' + info.currency + ' ($' + itemUsd + ' USD)';
             }
+        });
+
+        if (info.currency === 'USD') {
+            if (oldPriceEl) oldPriceEl.textContent = '$' + oldUsdStr + ' USD';
+            if (stackTotalEl) stackTotalEl.textContent = '$' + oldUsdStr + ' USD';
+            if (stackFinalEl) stackFinalEl.textContent = '$' + baseUsdStr + ' USD (Ahorras $' + savedUsdStr + ' USD)';
             if (usdBadgeEl) {
-                usdBadgeEl.innerHTML = isExitDiscountActiveOnPage
-                    ? '<span>🎁 Descuento del 40% activo: <strong>$' + activeUsdStr + ' USD</strong> <del style="opacity:0.7;margin-left:4px;">$' + baseUsdStr + ' USD</del></span>'
-                    : '<span>💵 Precio oficial en dólares: <strong>$' + activeUsdStr + ' USD</strong></span>';
+                usdBadgeEl.innerHTML = '<span>💵 Precio final en dólares: <strong>$' + baseUsdStr + ' USD</strong></span>';
             }
             if (checkoutBtnTextEl) {
-                checkoutBtnTextEl.textContent = isExitDiscountActiveOnPage
-                    ? 'Obtener Acceso con 40% OFF por $' + activeUsdStr + ' USD'
-                    : 'Obtener Acceso por $' + activeUsdStr + ' USD';
+                checkoutBtnTextEl.textContent = 'Obtener Acceso Completo por $' + baseUsdStr + ' USD';
             }
             if (mobileStickyPriceEl) {
-                mobileStickyPriceEl.textContent = isExitDiscountActiveOnPage
-                    ? '🎁 40% OFF Activo • $' + activeUsdStr + ' USD'
-                    : 'Acceso completo • $' + activeUsdStr + ' USD';
+                mobileStickyPriceEl.textContent = 'Valor $197 USD • Hoy $' + baseUsdStr + ' USD';
             }
             if (locLabelEl) {
                 locLabelEl.textContent = isAutoDetected
                     ? '📍 Ubicación detectada: ' + info.flag + ' ' + info.name + ' (USD)'
-                    : '🌎 Moneda seleccionada: ' + info.flag + ' Dólares ($' + activeUsdStr + ' USD)';
+                    : '🌎 Moneda seleccionada: ' + info.flag + ' Dólares ($' + baseUsdStr + ' USD)';
             }
 
             // Textos del modal Exit-Intent en USD
@@ -260,20 +263,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             if (oldPriceEl) {
-                oldPriceEl.textContent = isExitDiscountActiveOnPage
-                    ? (localBase + ' ' + info.currency + ' ($' + baseUsdStr + ' USD)')
-                    : (localOld + ' ' + info.currency + ' ($' + OLD_USD + ' USD)');
+                oldPriceEl.textContent = localOld + ' ' + info.currency + ' ($' + OLD_USD + ' USD)';
+            }
+            if (stackTotalEl) {
+                stackTotalEl.textContent = localOld + ' ' + info.currency + ' ($' + OLD_USD + ' USD)';
+            }
+            if (stackFinalEl) {
+                stackFinalEl.textContent = localBase + ' ' + info.currency + ' ($' + baseUsdStr + ' USD)';
             }
             if (usdBadgeEl) {
-                usdBadgeEl.innerHTML = isExitDiscountActiveOnPage
-                    ? '<span>🎁 40% OFF: Equivalente a <strong>$' + activeUsdStr + ' USD</strong> (Antes $' + baseUsdStr + ' USD)</span>'
-                    : '<span>💵 Equivalente a <strong>$' + activeUsdStr + ' USD</strong> (Precio oficial en dólares)</span>';
+                usdBadgeEl.innerHTML = '<span>💵 Equivalente a <strong>$' + baseUsdStr + ' USD</strong> (Precio oficial en dólares)</span>';
             }
             if (checkoutBtnTextEl) {
-                checkoutBtnTextEl.textContent = 'Obtener Acceso por ' + localNow + ' ' + info.currency + ' ($' + activeUsdStr + ' USD)';
+                checkoutBtnTextEl.textContent = 'Obtener Acceso por ' + localBase + ' ' + info.currency + ' ($' + baseUsdStr + ' USD)';
             }
             if (mobileStickyPriceEl) {
-                mobileStickyPriceEl.textContent = localNow + ' ' + info.currency + ' ($' + activeUsdStr + ' USD)';
+                mobileStickyPriceEl.textContent = localBase + ' ' + info.currency + ' ($' + baseUsdStr + ' USD)';
             }
             if (locLabelEl) {
                 locLabelEl.textContent = isAutoDetected
@@ -374,25 +379,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(function () {});
         });
 
-    // 7. Sistema de Intención de Salida (Exit-Intent) — Oferta 40% OFF ($11.90 USD)
+    // 7. Sistema de Intención de Salida (Exit-Intent) — SOLO cuando la persona va a salir de la página
     var exitModal = document.getElementById('exitIntentModal');
     var exitCloseBtn = document.getElementById('exitModalCloseBtn');
     var exitKeepReadingBtn = document.getElementById('exitKeepReadingBtn');
     var exitShown = false;
     var pageLoadedAt = Date.now();
 
-    function activateDiscountOnMainPage() {
-        isExitDiscountActiveOnPage = true;
-        if (checkoutBtnEl) {
-            checkoutBtnEl.href = EXIT_CHECKOUT_URL;
-        }
-        applyCountryPricing(selectEl ? selectEl.value : currentCountry, false);
-    }
-
     function showExitModal() {
         if (exitShown || !exitModal) return;
         exitShown = true;
-        activateDiscountOnMainPage();
         exitModal.classList.add('show');
         exitModal.setAttribute('aria-hidden', 'false');
     }
@@ -407,13 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
         exitCloseBtn.addEventListener('click', closeExitModal);
     }
     if (exitKeepReadingBtn) {
-        exitKeepReadingBtn.addEventListener('click', function () {
-            closeExitModal();
-            var accesoSection = document.getElementById('acceso');
-            if (accesoSection) {
-                accesoSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
+        exitKeepReadingBtn.addEventListener('click', closeExitModal);
     }
     if (exitModal) {
         exitModal.addEventListener('click', function (e) {
@@ -424,17 +414,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Escape') closeExitModal();
     });
 
-    // 7.1 Disparo en Computadora: cuando el puntero sube hacia la barra de pestañas / botón cerrar
+    // 7.1 Disparo en Computadora: ÚNICAMENTE cuando el cursor sale por el borde superior del navegador hacia la X o barra de direcciones
     document.addEventListener('mouseout', function (e) {
         if (exitShown) return;
-        if (Date.now() - pageLoadedAt < 2500) return;
+        if (Date.now() - pageLoadedAt < 2000) return;
         var from = e.relatedTarget || e.toElement;
-        if (!from && e.clientY <= 12) {
+        if (!from && e.clientY <= 5) {
             showExitModal();
         }
     });
 
-    // 7.2 Disparo en Celular y Computadora: Botón "Atrás" del navegador (History API)
+    // 7.2 Disparo al pulsar el botón "Atrás" del navegador para abandonar la página
     try {
         window.history.pushState({ page: 'sales_main' }, '', window.location.href);
         window.addEventListener('popstate', function () {
@@ -443,21 +433,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     } catch (e) {}
-
-    // 7.3 Disparo en Celular: Scroll rápido hacia arriba tras haber leído buena parte de la página
-    var maxScrollY = 0;
-    var lastScrollY = window.scrollY || 0;
-    window.addEventListener('scroll', function () {
-        if (exitShown) return;
-        var currentY = window.scrollY || 0;
-        var docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-        if (currentY > maxScrollY) {
-            maxScrollY = currentY;
-        }
-        // Si ya bajó al menos el 40% de la página y sube de golpe más de 160px buscando salir
-        if (docHeight > 600 && (maxScrollY / docHeight) > 0.40 && (lastScrollY - currentY) > 160 && Date.now() - pageLoadedAt > 6000) {
-            showExitModal();
-        }
-        lastScrollY = currentY;
-    }, { passive: true });
 });
