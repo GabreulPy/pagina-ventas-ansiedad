@@ -136,10 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (firstBtn) firstBtn.click();
     }
 
-    // 6. Sistema de Precio Local según Ubicación + Precio en USD Siempre Visible ($17.00 USD fijo en página / $11.90 USD en ventana de salida)
-    var BASE_USD = 17;
+    // 6. Sistema de Precio Local según Ubicación + Precio en USD Siempre Visible ($19.99 USD fijo en página / $11.90 USD en ventana de salida)
+    var BASE_USD = 19.99;
     var EXIT_USD = 11.90;
     var OLD_USD = 197;
+    var MAIN_CHECKOUT_URL = 'https://pay.hotmart.com/S108269721W?off=5gh3jx1x&checkoutMode=10';
+    var EXIT_CHECKOUT_URL = 'https://pay.hotmart.com/S108269721W?off=yylv3412&checkoutMode=10';
+    var isExitDiscountActiveOnPage = false;
 
     var countryCatalog = {
         USD: { name: 'Estados Unidos / Internacional', flag: '🇺🇸', currency: 'USD', symbol: '$', rate: 1, decimals: 2, locale: 'en-US' },
