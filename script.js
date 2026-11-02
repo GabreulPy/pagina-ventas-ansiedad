@@ -354,6 +354,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 Object.keys(countryCatalog).forEach(function (k) {
                     var c = countryCatalog[k];
                     if (c.currency !== 'USD' && data.rates[c.currency]) {
+                        // Si la API devuelve una tasa artificial o desactualizada para PYG, conservar la tasa real de mercado (7850)
+                        if (c.currency === 'PYG' && data.rates['PYG'] < 7000) {
+                            return;
+                        }
                         c.rate = data.rates[c.currency];
                     }
                 });
